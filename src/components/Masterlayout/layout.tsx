@@ -1,15 +1,10 @@
 // app/layout.tsx
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar, } from "@/components/Masterlayout/Sidebar";
+
+import Page from "../Dashboard/Sidebar/Pages";
+
 
 export default function Layout({ children }:any) {
   return (
-    <SidebarProvider>
-      <AppSidebar/>
-      <main>
-        <SidebarTrigger />
-        {children}
-      </main>
-    </SidebarProvider>
+    <Page>{children}</Page>
   );
 }

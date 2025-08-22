@@ -8,6 +8,9 @@ import LoginPage from './components/Loginpage/SignInpage/login'
 import Forgot from './components/Loginpage/Forgotpassword/Forgot'
 import Newotp from './components/Loginpage/ForgotOTP/Newotp'
 import Layout from './components/Masterlayout/layout'
+import Page from './components/Dashboard/Sidebar/Pages'
+import ProjectNavbar from './components/Pages/Projects'
+import { Task } from './components/Pages/Task'
 
 
 
@@ -23,6 +26,8 @@ function App() {
         <Route path='/forgotpassword' element={<Forgot></Forgot>}> </Route>
         <Route path='/forgototp' element={<Newotp></Newotp>}></Route>
         <Route path='/homepage' element={<Layout></Layout>}></Route>
+       
+        
       </Routes>
       </BrowserRouter>
     </>

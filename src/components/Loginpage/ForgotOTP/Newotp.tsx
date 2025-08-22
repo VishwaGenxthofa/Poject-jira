@@ -46,10 +46,10 @@ export default function Newotp() {
   maxLength={6}
   value={otp}
   onChange={(value) => setotp(value)}
-  className="flex justify-center gap-3" 
+  className="flex justify-center-safe gap-1" 
   required
 >
-  <InputOTPGroup className="flex gap-3">
+  <InputOTPGroup className="flex gap-2">
     <InputOTPSlot
       index={0}
       className="  justify-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
@@ -66,7 +66,7 @@ export default function Newotp() {
 
   <InputOTPSeparator />
 
-  <InputOTPGroup className="flex gap-3">
+  <InputOTPGroup className="flex gap-2">
     <InputOTPSlot
       index={3}
       className=" justify-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"

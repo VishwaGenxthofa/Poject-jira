@@ -6,6 +6,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp"
+import type { number } from "framer-motion";
 export default function Forgototp() {
   const [otp, setotp] = useState("");
 
@@ -31,19 +32,25 @@ export default function Forgototp() {
   maxLength={6}
   value={otp}
   onChange={(value) => setotp(value)}
-  className="flex justify-center gap-3" // ✅ center alignment
+  inputMode="numeric"
+  pattern="[0-9]*"
+  type="nummber"
+  className="flex justify-center gap-2" // ✅ center alignment
 >
   <InputOTPGroup className="flex gap-3">
     <InputOTPSlot
       index={0}
+     
       className="w-12 h-12 flex items-center justify-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
     />
     <InputOTPSlot
       index={1}
+      
       className="w-12 h-12 flex items-center justify-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
     />
     <InputOTPSlot
       index={2}
+      
       className="w-12 h-12 flex items-center justify-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
     />
   </InputOTPGroup>
@@ -53,14 +60,20 @@ export default function Forgototp() {
   <InputOTPGroup className="flex gap-3">
     <InputOTPSlot
       index={3}
+      
+    
       className="w-12 h-12 flex items-center justify-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
     />
     <InputOTPSlot
       index={4}
+      
+       
       className="w-12 h-12 flex items-center justify-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
     />
     <InputOTPSlot
       index={5}
+      
+      
       className="w-12 h-12 flex items-center justify-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
     />
   </InputOTPGroup>

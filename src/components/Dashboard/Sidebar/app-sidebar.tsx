@@ -1,23 +1,24 @@
 "use client"
 
+import { Link } from "react-router-dom"
 import * as React from "react"
 import {
   AudioWaveform,
   BookOpen,
   Bot,
   Command,
-  Frame,
-  GalleryVerticalEnd,
+ GalleryVerticalEnd,
   Map,
   PieChart,
+  Rocket,
   Settings2,
   SquareTerminal,
 } from "lucide-react"
-
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import logo from '../../../assets/logo.png'
+import { NavMain } from "@/components/Dashboard/Sidebar/nav-menu"
+import { NavProjects } from "@/components/Dashboard/Sidebar/nav-projects"
+import { NavUser } from "@/components/Dashboard/Sidebar/nav-users"
+// import { TeamSwitcher } from "@/components/Dashboard/Sidebar/teams-switcher"
 import {
   Sidebar,
   SidebarContent,
@@ -25,6 +26,8 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { Menubar } from "primereact/menubar"
+import Header from "@/components/Header/Header"
 
 // This is sample data.
 const data = {
@@ -139,13 +142,13 @@ const data = {
   ],
   projects: [
     {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
+      name: "MyProject1",
+      url: "/project",
+      icon: Rocket,
     },
     {
-      name: "Sales & Marketing",
-      url: "#",
+      name: "My Projects2",
+      url: "/task",
       icon: PieChart,
     },
     {
@@ -156,14 +159,18 @@ const data = {
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function NavSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+      <SidebarHeader className=" m-2">
+        {/* <TeamSwitcher teams={data.teams} /> */}
+        <Link to='/' className=' max-w-290-px items-center justify-center'>
+              <img src={logo} alt='Logo' className=" mx-auto border-white"/>
+            </Link>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+       
+        {/* <NavMain items={data.navMain} /> */}
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
