@@ -5,6 +5,8 @@ import { styled } from './stiches.config'
 interface ItemProps {
   text: string
   index: number
+ 
+
 }
 
 const StyledItem = styled('div', {

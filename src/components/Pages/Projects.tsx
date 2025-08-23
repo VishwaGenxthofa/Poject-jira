@@ -1,4 +1,4 @@
-import { Rocket } from "lucide-react";
+
 import React, { useState } from "react";
 
 export default function ControlledDemo() {
@@ -18,12 +18,7 @@ export default function ControlledDemo() {
   return (
     <div className="p-2 bg-white rounded-lg ">
       {/* Activate Button */}
-      <button
-        onClick={() => setActiveIndex(0)}
-        className="mb-4 px-4 py-2 border border-none text-blue-500 rounded-md hover:bg-blue-50 transition text-lg font-bold"
-      >
-       My Projects
-      </button>
+     <h2>{}</h2>
 
       {/* Tab Menu */}
       <div className="flex border-b">

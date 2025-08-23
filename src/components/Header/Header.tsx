@@ -5,7 +5,8 @@ import { InputText } from 'primereact/inputtext';
 import { Badge } from 'primereact/badge';
 import { Avatar } from 'primereact/avatar';  
 import { Button } from '../ui/button';
-
+import Modal from '../Popup/Popup';
+import { useState } from 'react';
 export default function Header() {
     const itemRenderer = (item:any) => (
         <a className="flex align-items-center p-menuitem-link">
@@ -15,6 +16,7 @@ export default function Header() {
             {item.shortcut && <span className="ml-auto border-1 surface-border border-round surface-100 text-xs p-1">{item.shortcut}</span>} */}
         </a>
     );
+
     const items = [
         {
             label: 'Home',
@@ -76,7 +78,9 @@ export default function Header() {
             template: itemRenderer
         }
     ];
-
+const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
     
     const end = (
         <div className="flex align-items-center gap-2">
@@ -94,9 +98,10 @@ export default function Header() {
       </div>
 
      
-      <button className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+      <button onClick={handleOpenModal}  className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition cursor-pointer">
         <span className="text-lg">+</span> Create
       </button>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}></Modal>
     </div>
     <hr style={{width:"100%;",borderRadius:"1px solid black;"}}></hr>
         </div>

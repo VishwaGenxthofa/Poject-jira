@@ -49,8 +49,9 @@ const Column: React.FC<ColumnProps> = ({ col: { list, id } }) => {
           </StyledList>
         </StyledColumn>
       )}
+     
     </Droppable>
-  
+    
     </>
   )
 }

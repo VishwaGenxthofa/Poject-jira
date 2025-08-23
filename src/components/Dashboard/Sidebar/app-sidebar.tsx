@@ -16,7 +16,7 @@ import {
 } from "lucide-react"
 import logo from '../../../assets/logo.png'
 import { NavMain } from "@/components/Dashboard/Sidebar/nav-menu"
-import { NavProjects } from "@/components/Dashboard/Sidebar/nav-projects"
+import NavProjects  from "@/components/Dashboard/Sidebar/nav-projects"
 import { NavUser } from "@/components/Dashboard/Sidebar/nav-users"
 // import { TeamSwitcher } from "@/components/Dashboard/Sidebar/teams-switcher"
 import {
@@ -171,7 +171,7 @@ export function NavSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
        
         {/* <NavMain items={data.navMain} /> */}
-        <NavProjects projects={data.projects} />
+        <NavProjects></NavProjects>
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
