@@ -5,14 +5,10 @@ export default function ControlledDemo() {
   const [activeIndex, setActiveIndex] = useState(3);
 
   const items = [
-    { label: "summary", icon: <i className="pi pi-globe"></i> },
-    { label: "List", icon: <i className="pi pi-table"></i> },
+    
+   
     { label: "Board", icon: <i className="pi pi-th-large"></i> },
-    { label: "Calendar", icon: <i className="pi pi-calendar"></i> },
-    { label: "Timeline", icon: <i className="pi pi-sliders-h"></i> },
-    { label: "Pages", icon: <i className="pi pi-clone"></i> },
-    { label: "Forms", icon: <i className="pi pi-file"></i> },
-    { label: "Code", icon: <i className="pi pi-code"></i> }
+   
   ];
 
   return (

@@ -13,22 +13,30 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { TbCloudUpload } from "react-icons/tb";
+import './model.css'
 import { MdOutlineKeyboardArrowUp } from "react-icons/md";
-
-
 type ModalProps = { isOpen: boolean; onClose: () => void };
 
 export default function Modal({ isOpen, onClose }: ModalProps) {
+  const [file, setFile] = useState<File | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
+  const today = new Date().toISOString().split("T")[0];
   // ----- form state -----
   const [project, setProject] = useState("kanban");
-  const [workType, setWorkType] = useState("");
-  const [status, setStatus] = useState("");
+  const [workType, setWorkType] = useState("task");
+  const [status, setStatus] = useState("todo");
   const [summary, setSummary] = useState("");
-  const [priority, setPriority] = useState("");
+  const [priority, setPriority] = useState("medium");
   const [startDate, setStartDate] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const [dueDate, setDueDate] = useState<string>(today);
   const [assignee, setAssignee] = useState("");
-
+;
   // ----- description (ReactQuill) -----
   const [description, setDescription] = useState("");
   const quillRef = useRef<ReactQuill>(null);
@@ -40,28 +48,36 @@ export default function Modal({ isOpen, onClose }: ModalProps) {
       editor.format("underline", true);
     }
   }, []);
+  const statusColors: Record<string, string> = {
+    todo: "bg-gray-200 font-semibold text-black-600",
+    inprogress: "bg-blue-200 font-semibold text-black-600 ",
+    done: "bg-green-200 font-semibold text-black-600",
+  };
+
 
   // ----- attachments (Drag & Drop) -----
   const [files, setFiles] = useState<File[]>([]);
-  const { getRootProps, getInputProps, isDragActive, fileRejections } =
-    useDropzone({
-      onDrop: (accepted) => setFiles((prev) => [...prev, ...accepted]),
-      multiple: true,
-      maxSize: 10 * 1024 * 1024,
-      accept: {
-        "image/*": [],
-        "application/pdf": [],
-        "text/plain": [],
-        "application/zip": [],
-      },
-    });
+  // const { getRootProps, getInputProps, isDragActive, fileRejections } =
+  //   useDropzone({
+  //     onDrop: (accepted) => setFiles((prev) => [...prev, ...accepted]),
+  //     multiple: true,
+  //     maxSize: 10 * 1024 * 1024,
+  //     accept: {
+  //       "image/*": [],
+  //       "application/pdf": [],
+  //       "text/plain": [],
+  //       "application/zip": [],
+  //     },
+  //   });
   const removeFile = (idx: number) => {
     setFiles((prev) => prev.filter((_, i) => i !== idx));
   };
 
   // ----- validation state -----
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
+  const clearError = (field: string) => {
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
   const validate = () => {
     let newErrors: { [key: string]: string } = {};
     if (!project) newErrors.project = "Project is required";
@@ -79,6 +95,7 @@ export default function Modal({ isOpen, onClose }: ModalProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
+   
 
     const data = {
       project,
@@ -123,11 +140,12 @@ export default function Modal({ isOpen, onClose }: ModalProps) {
         <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Project */}
           <div>
-            <label className="block mb-1 font-medium">Project <span className="text-red-600">*</span></label>
+            <label className="block mb-1 font-semibold text-gray-600">Project <span className="text-red-600">*</span></label>
             <select
               value={project}
-              onChange={(e) => setProject(e.target.value)}
-              className={`w-80 border rounded px-3 py-2 focus:outline-none border-2 border-black-500 ${
+              onChange={(e) =>{ setProject(e.target.value);  clearError("project");}}
+               
+              className={`w-80  rounded px-3 py-2  outline-border ${
                 errors.project ? "border-red-500" : "border-2 border-black-500"
               }`}
             >
@@ -141,11 +159,13 @@ export default function Modal({ isOpen, onClose }: ModalProps) {
 
           {/* Work Type */}
           <div>
-            <label className="block mb-1 font-medium">Work Type <span className="text-red-600">*</span></label>
-            <Select defaultValue="task">
+            <label className="block mb-1 font-semibold text-gray-600">Work Type <span className="text-red-600">*</span></label>
+            <Select defaultValue="task" onValueChange={(value)=>{setWorkType(value);clearError("worktype");}}>
               <SelectTrigger
+             
                 className={`w-80 border rounded px-3 py-2 cursor-pointer ${
                   errors.workType ? "border-red-500" : "border-gray-300"
+                  
                 }`}
               >
                 <SelectValue placeholder="task" />
@@ -170,19 +190,21 @@ export default function Modal({ isOpen, onClose }: ModalProps) {
 
           {/* Status */}
           <div >
-            <label className="block mb-1 font-medium">Status <span className="text-red-600">*</span></label>
-            <Select defaultValue="todo" value="todo" >
+            <label className="block mb-1  ">Status</label>
+            <Select defaultValue="todo" onValueChange={setStatus}>
               <SelectTrigger
-                className={` border rounded px-3 py-2 cursor-pointer bg-gray-100 ${
-                  errors.status ? "border-red-500" : "border-gray-300"
-                }`}
+              
+                className={` border rounded px-3 py-2 cursor-pointer status ${
+                  errors.status ? "border-red-500" : "border-gray-200"
+                  
+                } data-[state=open]:ring-2 data-[state=open]:ring-black-500 ${statusColors[status]}`}
               >
-                <SelectValue placeholder="todo" />
+                <SelectValue placeholder="todo"/>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="todo" ><span className="bg-gray-200 rounded text-black">To Do</span></SelectItem>
-                <SelectItem value="inprogress"><span className="bg-yellow-300 rounded ">In Progress</span></SelectItem>
-                <SelectItem value="done"><span className="bg-green-500 rounded text-white">Done</span></SelectItem>
+                <SelectItem value="todo" className="data-[state=checked]:text-black-500" ><span className="bg-gray-200 rounded font-semibold text-black-600 ">To Do</span></SelectItem>
+                <SelectItem value="inprogress" className="data-[state=checked]:text-black-500" ><span className="bg-blue-200  rounded font-semibold text-black-600">In Progress</span></SelectItem>
+                <SelectItem value="done" className="data-[state=checked]:text-black-500"><span className=" bg-green-200 rounded  font-semibold text-black-600">Done</span></SelectItem>
               </SelectContent>
             </Select>
             {errors.status && (
@@ -192,11 +214,12 @@ export default function Modal({ isOpen, onClose }: ModalProps) {
 
           {/* Summary */}
           <div>
-            <label className="block mb-1 font-medium">Summary <span className="text-red-600">*</span></label>
+            <label className="block mb-1 font-semibold text-gray-600">Summary <span className="text-red-600">*</span></label>
             <input
               type="text"
               value={summary}
-              onChange={(e) => setSummary(e.target.value)}
+              
+              onChange={(e) => {setSummary(e.target.value); clearError("summary");}}
               className={`w-full border rounded px-3 py-2 ${
                 errors.summary ? "border-red-500" : "border-gray-300"
               }`}
@@ -206,32 +229,33 @@ export default function Modal({ isOpen, onClose }: ModalProps) {
             )}
           </div>
           {/* Description (ReactQuill) */} <div> 
-            <label className="block mb-1 font-medium">Description</label>
-             <ReactQuill ref={quillRef} value={description} onChange={setDescription} className="h-30"
+            <label className="block mb-1 font-semibold text-gray-600">Description</label>
+             <ReactQuill ref={quillRef} value={description} onChange={setDescription} className="text-center"
              modules={{ toolbar: [ ["bold", "italic", "underline", "strike"],
-              [{ list: "ordered" }, { list: "bullet" }], ["link", "image"], ["clean"], ],
-               }} formats={[ "bold", "italic", "underline", "strike", "list", "bullet", "link", "image", ]}
-                placeholder="Type your description..." /> </div>
+             [{ list: "ordered" }, { list: "bullet" }], ["link", "image"], ["clean"], ],
+           }} formats={[ "bold", "italic", "underline", "strike", "list", "bullet", "link", "image", ]}
+                placeholder="Paste a Confluence link here ,and we can help generate the description from the page's contents." /> </div>
 
           {/* Dates */}
-          <br></br>
-          <br></br>
+         
           <div className="grid  gap-4 ">
             <div>
-              <label className="block mb-1 font-medium">Start Date</label>
+              <label className="block mb-1 font-semibold text-gray-600">Start Date</label>
               <input
                 type="date"
                 value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+                
+                onChange={(e) => {setStartDate(e.target.value);clearError("Start Date")}}
                 className="w-80 border border-gray-300 rounded px-3 py-2"
               />
             </div>
             <div>
-              <label className="block mb-1 font-medium ">Due Date </label>
+              <label className="block mb-1 font-semibold text-gray-600 ">Due Date </label>
               <input
                 type="date"
+                
                 value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
+                onChange={(e) => {setDueDate(e.target.value);clearError("duedate")}}
                 className={`w-80 border rounded px-3 py-2 ${
                   errors.dueDate ? "border-red-500" : "border-gray-300"
                 }`}
@@ -244,8 +268,8 @@ export default function Modal({ isOpen, onClose }: ModalProps) {
 
           {/* Priority */}
           <div>
-            <label className="block mb-1 font-medium">Priority </label>
-            <Select  defaultValue="medium">
+            <label className="block mb-1 font-semibold text-gray-600">Priority </label>
+            <Select  defaultValue="medium" onValueChange={(value)=>{setPriority(value);clearError("priority")}}>
               <SelectTrigger
                 className={`w-80 border rounded px-3 py-2 cursor-pointer ${
                   errors.priority ? "border-red-500" : "border-gray-300"
@@ -278,11 +302,11 @@ export default function Modal({ isOpen, onClose }: ModalProps) {
 
           {/* Assignee */}
           <div>
-            <label className="block mb-1 font-medium">Assignee </label>
+            <label className="block mb-1 font-semibold text-gray-600">Assignee </label>
             <select
               value={assignee}
-              onChange={(e) => setAssignee(e.target.value)}
-              className={`w-80 border rounded px-3 py-2 ${
+              onChange={(e) => {setAssignee(e.target.value); clearError("assignee")}}
+              className={`w-80 border rounded px-3 py-2 cursor-pointer ${
                 errors.assignee ? "border-red-500" : "border-gray-300"
               }`}
             >
@@ -295,39 +319,27 @@ export default function Modal({ isOpen, onClose }: ModalProps) {
               <p className="text-red-500 text-sm">{errors.assignee}</p>
             )}
           </div>
-
-          {/* Attachment */}
-          <div>
-            <label className="block mb-1 font-medium">Attachment</label>
-            <div
-              {...getRootProps()}
-              className={`w-full border-2 border-dashed rounded-lg px-4 py-8 text-center cursor-pointer transition ${
-                isDragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"
-              }`}
-            >
-              <input {...getInputProps()} />
-              {isDragActive ? <p>Drop files to attach or</p> : <p>Drag & drop files here, or click to select</p>}
-              <p className="text-xs text-gray-500 mt-1">
-                Up to 10 MB each. Images, PDF, TXT, ZIP.
-              </p>
-            </div>
-            {files.length > 0 && (
-              <ul className="mt-3 space-y-1">
-                {files.map((f, i) => (
-                  <li key={`${f.name}-${i}`} className="flex justify-between text-sm">
-                    <span>{f.name}</span>
-                    <button
-                      type="button"
-                      onClick={() => removeFile(i)}
-                      className="text-red-600 hover:underline"
-                    >
-                      Remove
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+     <div className="w-full">
+      <label className="block mb-1 font-semibold text-gray-600">Attachment</label>
+      <div className="border border-dashed border-gray-300 rounded-md p-4 flex items-center justify-center text-sm text-gray-600">
+        <TbCloudUpload  size={18} className="" />
+        {file ? (
+          <span className="text-gray-800 font-medium ">{file.name}</span>
+        ) : (
+          <span className=" text-gray-500  text-base p-2">
+            Drop files to attach or{" "}
+            <label className="text-gray-400 font-medium cursor-pointer p-2 m-2 border border-gray-300 rounded ">
+             Browse
+              <input 
+                type="file"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+            </label>
+          </span>
+        )}
+      </div>
+    </div>
 
           {/* Actions */}
           <div className="flex justify-end gap-3 mt-4">
